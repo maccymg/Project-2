@@ -5,14 +5,36 @@
 }
 
 .button {
+  margin: 0 10px;
   background-color: white;
   &:hover {
-    background-color: darken(white, 20%);
+    background-color: lighten(yellow, 20%);
   }
 }
 
+.q-title {
+  margin: 30px 0px;
+}
 
+img {
+  border: solid black 2px;
+}
 
+// .button {
+//   margin: 0 10px;
+//   background-color: white;
+//   &:hover {
+//     background-color: lighten(red, 20%);
+//   }
+// }
+
+// .button {
+//   margin: 0 10px;
+//   background-color: white;
+//   &:hover {
+//     background-color: lighten(green, 20%);
+//   }
+// }
 
 
 

@@ -1,6 +1,10 @@
 import React from 'react'
 import { getAllQuotes } from '../../lib/api'
+import { useHistory } from 'react-router-dom'
+
 function Quiz() {
+  const history = useHistory()
+  const [playedAuthors, setPlayedAuthors] = React.useState([])
   const [quotes, setQuotes] = React.useState(null)
   const [quizQuote, setQuizQuote] = React.useState({
     text: '',
@@ -8,26 +12,31 @@ function Quiz() {
   })
   const [options, setOptions] = React.useState(null)
   const [game, setGame] = React.useState(null)
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms))
-  }
-  const handleGame = async (e) => {
-    e.preventDefault()
-    await sleep(1000)
+  const [correctOption, setCorrectOption] = React.useState(null)
+
+  const handleGame = (e) => {
+    if (game === 10) {
+      alert(`You've scored ${correctOption} out of 10 answers right`)
+      history.push('/')
+    }
     if (e.target.value === quizQuote.author) {
-      alert('correct')
+      setCorrectOption(correctOption + 1)
     } else {
-      alert('incorrect')
+      console.log('wrong')
     }
     setGame(game + 1)
-    console.log(game)
   }
+
   React.useEffect(() => {
     const getData = async () => {
       try {
         const { data } = await getAllQuotes()
-        setQuotes(data)
+        const filteredData = data.filter(item => {
+          return item.author
+        })
+        setQuotes(filteredData)
         setGame(1)
+        setCorrectOption(0)
       } catch (err) {
         console.log(err)
       }
@@ -35,100 +44,59 @@ function Quiz() {
     getData()
   }, [])
 
-  let item
-
   React.useEffect(()=> {
-    const getRandomQuote = async () => {  
-      ///get random index value/
-      try {
-        const randomIndex = Math.floor(Math.random() * quotes.length)
-        ///get random item/
-        item = quotes[randomIndex]  
-        setQuizQuote(item)
-      } catch (err) {
-        console.log(err)
-      }
+    if (!quotes) return 
+    let item = quotes[Math.floor(Math.random() * quotes.length)]
+    while (playedAuthors.includes(item.author)) {
+      item = { ...quotes[Math.floor(Math.random() * quotes.length)] }
     }
-    getRandomQuote()
+    const options = getOptions(quotes, item)
+    setOptions(options)
+    setPlayedAuthors([...playedAuthors, item.author])
+    setQuizQuote(item)
   }, [game])
 
-  React.useEffect(() => {
+  const getOptions = (quotes, quizQuote) => {
+    if (!quotes) return []
     const randomOptionsNumber = Math.floor(Math.random() * 4)
-    
-
-    const creatingOptions = async () => {
-      try {
-        const optionsArray = []
-        if (randomOptionsNumber === 0) {
-          optionsArray.push(quizQuote)
-          for (let I = 0; I < 3; I++) {
-            const randomIndex = Math.floor(Math.random() * quotes.length)
-            optionsArray.push(quotes[randomIndex])
-          }
-        } else if (randomOptionsNumber === 1) {
-          for (let I = 0; I < 3; I++) {
-            const randomIndex = Math.floor(Math.random() * quotes.length)
-            optionsArray.push(quotes[randomIndex])
-          }
-          optionsArray.push(quizQuote)
-        } else if (randomOptionsNumber === 2) {
-          for (let I = 0; I < 2; I++) {
-            const randomIndex = Math.floor(Math.random() * quotes.length)
-            optionsArray.push(quotes[randomIndex])
-          }
-          optionsArray.push(quizQuote)
-          const randomIndex = Math.floor(Math.random() * quotes.length)
-          optionsArray.push(quotes[randomIndex])
-        } else if (randomOptionsNumber === 3) {
-          const randomIndex = Math.floor(Math.random() * quotes.length)
-          optionsArray.push(quotes[randomIndex])
-          optionsArray.push(quizQuote)
-          for (let I = 0; I < 2; I++) {
-            const randomIndex = Math.floor(Math.random() * quotes.length)
-            optionsArray.push(quotes[randomIndex])
-          }
-        }
-        setOptions(optionsArray)
-      } catch (err) {
-        console.log(err)
+    const optionsArray = []
+    if (randomOptionsNumber === 0) {
+      optionsArray.push(quizQuote)
+      for (let i = 0; i < 3; i++) {
+        const randomIndex = Math.floor(Math.random() * quotes.length)
+        optionsArray.push(quotes[randomIndex])
       }
-    } 
-    creatingOptions()
-  }, [quizQuote])
-  ///const randomOptionsNumber = Math.floor(Math.random() * 4)/
-  ///console.log(optionsArray)/
-  ///React.useEffect(()=> {/
-  ///const getRandomQuotes = async () => {/
-  ///// get random index value/
-  ///try {/
-  ///const randomQuoteOne = quotes[Math.floor(Math.random() * quotes.length)]/
-  ///// console.log(randomQuoteOne.author)/
-  ///const randomQuoteTwo = quotes[Math.floor(Math.random() * quotes.length)]/
-  ///// console.log(randomQuoteTwo.author)/
-  ///const randomQuoteThree = quotes[Math.floor(Math.random() * quotes.length)]/
-  ///// console.log(randomQuoteThree.author)/
-  ///if (randomOptionsNumber === 0) {/
-  ///return optionsArray = [randomQuoteOne.author, randomQuoteTwo.author, randomQuoteThree.author, quizQuote.author]/
-  ///} else if (randomOptionsNumber === 1){/
-  ///return optionsArray = [randomQuoteOne.author, quizQuote.author, randomQuoteThree.author, randomQuoteTwo.author]/
-  ///} else if (randomOptionsNumber === 2) {/
-  ///optionsArray = [randomQuoteOne.author, randomQuoteTwo.author, quizQuote.author, randomQuoteThree.author]/
-  ///} else if (randomOptionsNumber === 3) {/
-  ///return optionsArray = [quizQuote.author, randomQuoteTwo.author, randomQuoteThree.author, randomQuoteOne.author]/
-  ///}/
-  ///} catch (err) {/
-  ///console.log(err)/
-  ///}/
-  ///}/
-  ///getRandomQuotes()/
-  ///}, [quizQuote])/
-  
-  ///console.log(getRandomQuote)/
+    } else if (randomOptionsNumber === 1) {
+      for (let i = 0; i < 3; i++) {
+        const randomIndex = Math.floor(Math.random() * quotes.length)
+        optionsArray.push(quotes[randomIndex])
+      }
+      optionsArray.push(quizQuote)
+    } else if (randomOptionsNumber === 2) {
+      for (let i = 0; i < 2; i++) {
+        const randomIndex = Math.floor(Math.random() * quotes.length)
+        optionsArray.push(quotes[randomIndex])
+      }
+      optionsArray.push(quizQuote)
+      const randomIndex = Math.floor(Math.random() * quotes.length)
+      optionsArray.push(quotes[randomIndex])
+    } else if (randomOptionsNumber === 3) {
+      const randomIndex = Math.floor(Math.random() * quotes.length)
+      optionsArray.push(quotes[randomIndex])
+      optionsArray.push(quizQuote)
+      for (let i = 0; i < 2; i++) {
+        const randomIndex = Math.floor(Math.random() * quotes.length)
+        optionsArray.push(quotes[randomIndex])
+      }
+    }
+    return optionsArray
+  }
+
   return (
     <>
       <section className="hero is-fullheight-with-navbar is-info">
-        <div className="container">
-          <h1 className="q-title title is-center">Guess who Said the Quote!</h1>
+        <div className="container quiz-title">
+          <h1 className="title is-center q-title">Guess who said the Quote!</h1>
         </div>
         <div className="container">
           <div className="card">
@@ -137,9 +105,10 @@ function Quiz() {
         </div>
         <div className="container">
           {options ?
-            options.map(option => (
-              <button className="button"
-                key={option.index}
+            options.map((option, index) => (
+              <button 
+                className='button'
+                key={index.toString()}
                 onClick={handleGame}
                 value={option.author}
               >
@@ -147,11 +116,16 @@ function Quiz() {
               </button>
             ))
             :
-            '… loading'
+            '... loading'
           }
+        </div>
+        <div className="game-info">
+          <p className="pStyles">Score: {correctOption}</p>
+          <p className="pStyles">Question Humber: {game}</p>
         </div>
       </section>
     </>
   )
 }
+
 export default Quiz

@@ -77,7 +77,7 @@ function QuizCard(quizQuote) {
 This was a very good learning experience for me as pair coding taught me a lot about how important communication is when coding in teams. Particularly at the beginning of this project I feel that we were so concerned for time that we just wanted to get coding as quickly as possibly and soon found out that a clear plan and communication were best and taking a step back to allow time for this really helped us. This was a huge learning curve being so new to React and while this was defintely my most challenging project it was hugely beneficial for my development.
 
 
-### Wins and Unsolved Problems
+### Major hurdles and unsolved problems
 
 Major hurdles included mapping and displaying content through jsx, using state, passing down data to components and the timeframe for this project.
 

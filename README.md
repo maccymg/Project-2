@@ -57,6 +57,12 @@ Having hooked up these pages and using Bulma to style them I began working on a 
 
 We then had the problem of randomly positioning the right answer into the four buttons. While I worked on this my partner sorted out the logic behind the scoring. The idea behind my logic was to randomly select a number between one and four. In doing this it would randomly select one of the four different combinations of the position of the right answer in the array. Using an if statement with loops and pushing at different orders I manged to achieve this. We then dealt with are final problem of having authors of null in the data. Using a filter to solve this we made final adjustment as stylistic improvements and made sure are code was in sync with each other
 
+### Major hurdles and unsolved problems
+
+Major hurdles included mapping and displaying content through JSX, using state, passing down data to components and the timeframe for this project.
+
+In terms of unsolved problems, I think that the styling was quite basic due to the time spend on getting everything else working and using a framework for the first time. Similarly picking a very simple API in the end was a disadvantage and so there are lots of things I would have done differently given the chance to do it again but it was a very good experience.
+
 
 ```jsx
 // Quiz Card JSX
@@ -76,15 +82,15 @@ function QuizCard(quizQuote) {
   )
 }
 ```
+
+### Wins
+
 This was a very good learning experience for me as pair coding taught me a lot about how important communication is when coding in teams. Particularly at the beginning of this project I feel that we were so concerned for time that we just wanted to get coding as quickly as possibly and soon found out that a clear plan and communication were best and taking a step back to allow time for this really helped us. This was a huge learning curve being so new to React and while this was defintely my most challenging project it was hugely beneficial for my development.
-
-
-### Major hurdles and unsolved problems
-
-Major hurdles included mapping and displaying content through jsx, using state, passing down data to components and the timeframe for this project.
-
-In terms of unsolved problems, I think that the styling was quite basic due to the time spend on getting everything else working and using a framework for the first time. Similarly picking a very simple API in the end was a disadvantage and so there are lots of things I would have done differently given the chance to do it again but it was a very good experience.
 
 ### Key learning
 
 Key learning included requests, database structures, turnary operators and using React.
+
+### Future Features
+
+Ideas for future features include re-styling, adding animations and being able to play against another player.
